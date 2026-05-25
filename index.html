@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C1 Production Monitor</title>
-    <!-- Bootstrap 5 CSS (Темна тема включена через data-bs-theme) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body data-bs-theme="dark" class="bg-dark text-light">
 
-    <!-- Навігаційна панель з перемикачем мов -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-body-tertiary border-bottom border-secondary mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-body-tertiary border-bottom border-secondary mb-3">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold text-info" href="#">
                 <i class="bi bi-cpu-fill me-2"></i>C1 Monitor
@@ -28,73 +25,106 @@
         </div>
     </nav>
 
-    <div class="container-fluid px-3 px-md-5">
-        <div class="row g-4">
-            <!-- Ліва колонка: Форма та статистика -->
+    <div class="container-fluid px-2 px-md-4">
+        <div class="row g-3">
             <div class="col-12 col-lg-4">
-                <div class="card card-custom p-4 mb-4 shadow">
-                    <h4 class="card-title mb-3 text-info d-flex align-items-center">
+                <div class="card card-custom p-3 mb-3 shadow">
+                    <h5 class="card-title mb-3 text-info d-flex align-items-center">
                         <i class="bi bi-plus-circle-fill me-2"></i><span data-i18n="addEntry">Внесення даних</span>
-                    </h4>
-                    <div class="mb-3">
-                        <label for="dateInput" class="form-label" data-i18n="selectDate">Виберіть дату:</label>
-                        <input type="date" id="dateInput" class="form-control">
+                    </h5>
+                    <div class="mb-2">
+                        <label for="dateInput" class="form-label small" data-i18n="selectDate">Виберіть дату:</label>
+                        <input type="date" id="dateInput" class="form-control form-control-sm">
                     </div>
+                    
+                    <div class="mb-2">
+                        <label for="shiftTypeInput" class="form-label small" data-i18n="shiftType">Тип зміни:</label>
+                        <select id="shiftTypeInput" class="form-select form-select-sm bg-dark text-light border-secondary">
+                            <option value="R" data-i18n="shiftR">🌅 Ранішня (R)</option>
+                            <option value="O" data-i18n="shiftO">☀️ Післяобідня (O)</option>
+                            <option value="N" data-i18n="shiftN">🌃 Нічна (N)</option>
+                            <option value="V" data-i18n="shiftV">🏖️ Вихідний (V)</option>
+                        </select>
+                    </div>
+
                     <div class="mb-3">
-                        <label for="percentageInput" class="form-label" data-i18n="enterPercentage">Відсоток виробітку (%):</label>
-                        <div class="input-group">
-                            <input type="number" id="percentageInput" class="form-control" min="50" max="200" placeholder="112">
+                        <label for="percentageInput" class="form-label small" data-i18n="enterPercentage">Відсоток виробітку (%):</label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" id="percentageInput" class="form-control" min="0" max="200" placeholder="112">
                             <span class="input-group-text bg-secondary text-white">%</span>
                         </div>
                     </div>
-                    <button class="btn btn-info w-100 fw-bold" onclick="saveData()" data-i18n="saveBtn">Зберегти дані</button>
+                    <button class="btn btn-sm btn-info w-100 fw-bold" onclick="saveData()" data-i18n="saveBtn">Зберегти дані</button>
                 </div>
 
-                <!-- Блок статистики -->
-                <div class="card card-custom p-4 shadow">
-                    <h4 class="card-title mb-3 text-warning d-flex align-items-center">
+                <div class="card card-custom p-3 shadow">
+                    <h5 class="card-title mb-3 text-warning d-flex align-items-center">
                         <i class="bi bi-graph-up-arrow me-2"></i><span data-i18n="stats">Статистика за місяць</span>
-                    </h4>
-                    <div class="mb-3">
-                        <label for="monthFilter" class="form-label" data-i18n="selectMonth">Обрати місяць:</label>
-                        <input type="month" id="monthFilter" class="form-control" onchange="renderAll()">
+                    </h5>
+                    <div class="mb-2">
+                        <label for="monthFilter" class="form-label small" data-i18n="selectMonth">Обрати місяць:</label>
+                        <input type="month" id="monthFilter" class="form-control form-control-sm" onchange="renderAll()">
                     </div>
-                    <div class="p-3 bg-secondary bg-opacity-25 rounded border border-secondary text-center">
-                        <div class="small text-muted" data-i18n="monthlyAverage">Середній показник за місяць</div>
-                        <div class="display-5 fw-bold text-success" id="averageDisplay">0.00%</div>
+                    
+                    <div class="p-2 bg-secondary bg-opacity-25 rounded border border-secondary text-center mb-3">
+                        <div class="text-muted small-text" data-i18n="monthlyAverage">Середній виробіток</div>
+                        <div class="fs-3 fw-bold text-success" id="averageDisplay">0.00%</div>
+                    </div>
+
+                    <div class="row g-2 text-center small">
+                        <div class="col-6">
+                            <div class="p-2 bg-dark rounded border border-secondary">
+                                <div class="text-muted small-text fw-bold" data-i18n="totalShifts">Всього</div>
+                                <div class="fw-bold fs-5 text-info" id="totalShiftsDisplay">0</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 bg-dark rounded border border-secondary">
+                                <div class="text-muted small-text fw-bold" data-i18n="dayShifts">Ранні (R)</div>
+                                <div class="fw-bold fs-5 text-warning" id="dayShiftsDisplay">0</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 bg-dark rounded border border-secondary">
+                                <div class="text-muted small-text fw-bold" data-i18n="afternoonShifts">Післяобідні (O)</div>
+                                <div class="fw-bold fs-5 text-orange" id="afternoonShiftsDisplay">0</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 bg-dark rounded border border-secondary">
+                                <div class="text-muted small-text fw-bold" data-i18n="nightShifts">Нічні (N)</div>
+                                <div class="fw-bold fs-5 text-purple" id="nightShiftsDisplay">0</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Права колонка: Візуальний КАЛЕНДАР та таблиця -->
             <div class="col-12 col-lg-8">
-                <!-- Календарна сітка -->
-                <div class="card card-custom p-4 mb-4 shadow">
-                    <h4 class="card-title mb-3 text-success d-flex align-items-center">
+                <div class="card card-custom p-3 mb-3 shadow">
+                    <h5 class="card-title mb-2 text-success d-flex align-items-center">
                         <i class="bi bi-calendar3 me-2"></i><span data-i18n="calendarView">Візуальний календар змін</span>
-                    </h4>
+                    </h5>
                     
-                    <!-- Дні тижня -->
-                    <div class="calendar-grid-header text-muted fw-bold mb-2">
+                    <div class="calendar-grid-header text-muted fw-bold mb-1">
                         <div data-i18n="mon">Пн</div><div data-i18n="tue">Вт</div><div data-i18n="wed">Ср</div>
                         <div data-i18n="thu">Чт</div><div data-i18n="fri">Пт</div><div data-i18n="sat" class="text-danger">Сб</div>
                         <div data-i18n="sun" class="text-danger">Нд</div>
                     </div>
                     
-                    <!-- Тіло календаря (генерується через JS) -->
                     <div id="calendarGrid" class="calendar-grid"></div>
                 </div>
 
-                <!-- Таблиця швидкого перегляду / видалення -->
-                <div class="card card-custom p-4 shadow">
-                    <h4 class="card-title mb-3 text-secondary d-flex align-items-center">
+                <div class="card card-custom p-3 shadow">
+                    <h5 class="card-title mb-2 text-secondary d-flex align-items-center">
                         <i class="bi bi-list-task me-2"></i><span data-i18n="historyTable">Список змін за місяць</span>
-                    </h4>
-                    <div class="table-responsive">
-                        <table class="table table-dark table-hover align-middle text-center">
+                    </h5>
+                    <div class="table-responsive max-table-height">
+                        <table class="table table-dark table-sm table-hover align-middle text-center small mb-0">
                             <thead>
                                 <tr>
                                     <td class="fw-bold" data-i18n="tableDate">Дата</td>
+                                    <td class="fw-bold" data-i18n="tableShift">Зміна</td>
                                     <td class="fw-bold" data-i18n="tableValue">Виробіток</td>
                                     <td class="fw-bold" data-i18n="tableAction">Дія</td>
                                 </tr>
@@ -107,7 +137,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS та кастомний скрипт -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="app.js"></script>
 </body>
