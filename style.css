@@ -8,92 +8,116 @@
     font-size: 0.72rem;
 }
 
-.calendar-grid-header {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
+/* Надійна флекс-сітка календаря замість Grid для уникнення зсувів */
+.calendar-flex-header {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
     text-align: center;
-    font-size: 0.8rem;
-    padding-bottom: 4px;
+    font-size: 0.78rem;
+    font-weight: bold;
+    color: #8a8a93;
+    padding-bottom: 6px;
 }
 
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
+.calendar-flex-header div {
+    flex: 0 0 14.285% !important;
+    max-width: 14.285% !important;
+    text-align: center;
 }
 
+.calendar-flex-container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+    gap: 4px 0px !important; /* Відступи по вертикалі */
+    box-sizing: border-box;
+}
+
+/* Комірка дня */
 .calendar-day {
-    position: relative;
-    background-color: #25252d;
-    border: 1px solid #32323d;
-    border-radius: 6px;
-    padding: 3px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: stretch;
-    min-height: 52px;
-    transition: all 0.15s ease;
+    all: unset !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    flex: 0 0 calc(14.285% - 4px) !important;
+    max-width: calc(14.285% - 4px) !important;
+    margin: 0 2px !important;
+    background-color: #25252d !important;
+    border: 1px solid #32323d !important;
+    border-radius: 6px !important;
+    padding: 4px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    align-items: stretch !important;
+    min-height: 52px !important;
+    max-height: 54px !important;
 }
 
 .calendar-day:hover {
-    background-color: #2d2d38;
-    border-color: #5c5c70;
-    cursor: pointer;
+    background-color: #2d2d38 !important;
+    border-color: #5c5c70 !important;
+    cursor: pointer !important;
 }
 
 .calendar-day.empty {
-    background-color: transparent;
-    border: none;
-    cursor: default;
+    background-color: transparent !important;
+    border: none !important;
+    cursor: default !important;
+    pointer-events: none !important;
 }
 
 .day-number {
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #8a8a93;
-    line-height: 1;
+    font-size: 0.75rem !important;
+    font-weight: bold !important;
+    color: #8a8a93 !important;
+    line-height: 1 !important;
+    text-align: left !important;
 }
 
 .calendar-day.has-data .day-number {
-    color: #ffffff;
+    color: #ffffff !important;
 }
 
+/* Позначки типів змін */
 .day-shift-badge {
-    position: absolute;
-    top: 2px;
-    right: 4px;
-    font-size: 0.65rem;
-    font-weight: 800;
-    padding: 1px 3px;
-    border-radius: 3px;
-    line-height: 1;
+    position: absolute !important;
+    top: 2px !important;
+    right: 3px !important;
+    font-size: 0.6rem !important;
+    font-weight: 800 !important;
+    padding: 1px 3px !important;
+    border-radius: 3px !important;
+    line-height: 1 !important;
 }
-.badge-R { background-color: rgba(255, 193, 7, 0.2); color: #ffc107; }
-.badge-O { background-color: rgba(253, 126, 20, 0.2); color: #fd7e14; }
-.badge-N { background-color: rgba(111, 66, 193, 0.2); color: #a370f7; }
-.badge-V { background-color: rgba(108, 117, 125, 0.2); color: #adb5bd; }
+.badge-R { background-color: rgba(255, 193, 7, 0.2) !important; color: #ffc107 !important; }
+.badge-O { background-color: rgba(253, 126, 20, 0.2) !important; color: #fd7e14 !important; }
+.badge-N { background-color: rgba(111, 66, 193, 0.2) !important; color: #a370f7 !important; }
+.badge-V { background-color: rgba(108, 117, 125, 0.2) !important; color: #adb5bd !important; }
 
+/* Текст відсотків всередині дня */
 .day-value {
-    font-size: 0.65rem;
-    font-weight: bold;
-    text-align: center;
-    border-radius: 3px;
-    padding: 1px 0;
-    margin-top: auto;
-    width: 100%;
-    white-space: nowrap;
+    font-size: 0.6rem !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    border-radius: 3px !important;
+    padding: 1px 0 !important;
+    margin-top: auto !important;
+    width: 100% !important;
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
 }
 
-.val-high { color: #00ff88; background-color: rgba(0, 255, 136, 0.12); }
-.val-normal { color: #00bfff; background-color: rgba(0, 191, 255, 0.12); }
-.val-low { color: #ff4560; background-color: rgba(255, 69, 96, 0.12); }
+.val-high { color: #00ff88 !important; background-color: rgba(0, 255, 136, 0.12) !important; }
+.val-normal { color: #00bfff !important; background-color: rgba(0, 191, 255, 0.12) !important; }
+.val-low { color: #ff4560 !important; background-color: rgba(255, 69, 96, 0.12) !important; }
 
-.text-purple { color: #a370f7; }
-.text-orange { color: #fd7e14; }
+.text-purple { color: #a370f7 !important; }
+.text-orange { color: #fd7e14 !important; }
 .max-table-height { max-height: 200px; overflow-y: auto; }
 
 @media (max-width: 360px) {
-    .calendar-day { min-height: 46px; padding: 2px; }
-    .day-value { font-size: 0.6rem; }
+    .calendar-day { min-height: 46px !important; padding: 2px !important; }
+    .day-value { font-size: 0.55rem !important; }
 }
