@@ -1,90 +1,99 @@
-/* Кастомні стилі для адаптивності та гарного темного вигляду */
 .card-custom {
     background-color: #1e1e24 !important;
     border: 1px solid #2d2d35 !important;
     border-radius: 12px;
 }
 
-/* Сітка календаря: 7 slowdown-колонок */
+.small-text {
+    font-size: 0.72rem;
+}
+
 .calendar-grid-header {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    padding-bottom: 4px;
 }
 
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
+    gap: 4px;
 }
 
-/* Окремі комірки днів у календарі */
 .calendar-day {
-    aspect-ratio: 1; /* Робить дні квадратними */
+    position: relative;
     background-color: #25252d;
     border: 1px solid #32323d;
-    border-radius: 8px;
-    padding: 6px;
+    border-radius: 6px;
+    padding: 3px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: all 0.2s ease;
-    min-height: 65px;
-}
-
-@media (max-width: 576px) {
-    .calendar-day {
-        min-height: 50px;
-        padding: 4px;
-        font-size: 0.8rem;
-    }
-    .day-value {
-        font-size: 0.75rem !important;
-    }
+    align-items: stretch;
+    min-height: 52px;
+    transition: all 0.15s ease;
 }
 
 .calendar-day:hover {
     background-color: #2d2d38;
-    border-color: #4f4f64;
+    border-color: #5c5c70;
     cursor: pointer;
 }
 
-/* Стилі для порожніх днів на початку місяця */
 .calendar-day.empty {
     background-color: transparent;
     border: none;
     cursor: default;
 }
 
-/* Стилі відображення відсотків всередині дня */
 .day-number {
+    font-size: 0.75rem;
     font-weight: bold;
-    color: #a0a0a5;
+    color: #8a8a93;
+    line-height: 1;
 }
 
 .calendar-day.has-data .day-number {
-    color: #fff;
+    color: #ffffff;
 }
+
+.day-shift-badge {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 1px 3px;
+    border-radius: 3px;
+    line-height: 1;
+}
+.badge-R { background-color: rgba(255, 193, 7, 0.2); color: #ffc107; }
+.badge-O { background-color: rgba(253, 126, 20, 0.2); color: #fd7e14; }
+.badge-N { background-color: rgba(111, 66, 193, 0.2); color: #a370f7; }
+.badge-V { background-color: rgba(108, 117, 125, 0.2); color: #adb5bd; }
 
 .day-value {
-    font-size: 0.85rem;
+    font-size: 0.65rem;
     font-weight: bold;
-    text-align: right;
-    padding: 2px 4px;
-    border-radius: 4px;
+    text-align: center;
+    border-radius: 3px;
+    padding: 1px 0;
+    margin-top: auto;
+    width: 100%;
+    white-space: nowrap;
 }
 
-/* Колірна індикація продуктивності */
-.val-high {
-    color: #00ff88;
-    background-color: rgba(0, 255, 136, 0.1);
-}
-.val-normal {
-    color: #00bfff;
-    background-color: rgba(0, 191, 255, 0.1);
-}
-.val-low {
-    color: #ff4560;
-    background-color: rgba(255, 69, 96, 0.1);
+.val-high { color: #00ff88; background-color: rgba(0, 255, 136, 0.12); }
+.val-normal { color: #00bfff; background-color: rgba(0, 191, 255, 0.12); }
+.val-low { color: #ff4560; background-color: rgba(255, 69, 96, 0.12); }
+
+.text-purple { color: #a370f7; }
+.text-orange { color: #fd7e14; }
+.max-table-height { max-height: 200px; overflow-y: auto; }
+
+@media (max-width: 360px) {
+    .calendar-day { min-height: 46px; padding: 2px; }
+    .day-value { font-size: 0.6rem; }
 }
