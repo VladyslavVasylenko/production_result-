@@ -50,7 +50,7 @@
                     <div class="mb-3">
                         <label for="percentageInput" class="form-label small" data-i18n="enterPercentage">Відсоток виробітку (%):</label>
                         <div class="input-group input-group-sm">
-                            <input type="number" id="percentageInput" class="form-control" min="0" max="200" placeholder="112">
+                            <input type="number" id="percentageInput" class="form-control" min="0" max="200" placeholder="optional">
                             <span class="input-group-text bg-secondary text-white">%</span>
                         </div>
                     </div>
@@ -103,16 +103,16 @@
             <div class="col-12 col-lg-8">
                 <div class="card card-custom p-3 mb-3 shadow">
                     <h5 class="card-title mb-2 text-success d-flex align-items-center">
-                        <i class="bi bi-calendar3 me-2"></i><span data-i18n="calendarView">Візуальний календар змін</span>
+                        <i class="bi bi-calendar3 me-2"></i><span data-i18n="calendarView">Візуальний calendar змін</span>
                     </h5>
                     
-                    <div class="calendar-grid-header text-muted fw-bold mb-1">
+                    <div class="calendar-flex-header mb-1">
                         <div data-i18n="mon">Пн</div><div data-i18n="tue">Вт</div><div data-i18n="wed">Ср</div>
                         <div data-i18n="thu">Чт</div><div data-i18n="fri">Пт</div><div data-i18n="sat" class="text-danger">Сб</div>
                         <div data-i18n="sun" class="text-danger">Нд</div>
                     </div>
                     
-                    <div id="calendarGrid" class="calendar-grid"></div>
+                    <div id="calendarGrid" class="calendar-flex-container"></div>
                 </div>
 
                 <div class="card card-custom p-3 shadow">
