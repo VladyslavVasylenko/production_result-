@@ -88,11 +88,13 @@ function renderCalendar(year, month, monthlyData) {
         dayCell.className = 'calendar-day';
         
         const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        
         dayCell.onclick = () => {
             document.getElementById('dateInput').value = dateStr;
             const existing = monthlyData.find(l => l.date === dateStr);
             if (existing) {
-                document.getElementById('percentageInput').value = existing.percentage && parseFloat(existing.percentage) > 0 ? existing.percentage : '';
+                const pct = parseFloat(existing.percentage);
+                document.getElementById('percentageInput').value = (existing.percentage !== null && pct > 0) ? existing.percentage : '';
                 document.getElementById('shiftTypeInput').value = existing.shiftType || 'R';
             } else {
                 document.getElementById('percentageInput').value = '';
@@ -116,16 +118,19 @@ function renderCalendar(year, month, monthlyData) {
                 dayCell.appendChild(shiftBadge);
             }
 
-            if (logForDay.percentage && parseFloat(logForDay.percentage) > 0 && logForDay.shiftType !== 'V') {
-                const valSpan = document.createElement('span');
+            if (logForDay.percentage !== null && logForDay.shiftType !== 'V') {
                 const pct = parseFloat(logForDay.percentage);
-                valSpan.innerText = `${Math.round(pct)}%`;
-                
-                if (pct >= 115) valSpan.className = 'day-value val-high';
-                else if (pct >= 100) valSpan.className = 'day-value val-normal';
-                else valSpan.className = 'day-value val-low';
+                if (pct > 0) {
+                    const valSpan = document.createElement('span');
+                    valSpan.className = 'day-value';
+                    valSpan.innerText = `${Math.round(pct)}%`;
+                    
+                    if (pct >= 115) valSpan.classList.add('val-high');
+                    else if (pct >= 100) valSpan.classList.add('val-normal');
+                    else valSpan.classList.add('val-low');
 
-                dayCell.appendChild(valSpan);
+                    dayCell.appendChild(valSpan);
+                }
             }
         }
         grid.appendChild(dayCell);
@@ -144,7 +149,8 @@ function renderTable(monthlyData) {
         const formattedDate = new Date(log.date).toLocaleDateString(lang === 'cs' ? 'cs-CZ' : (lang === 'en' ? 'en-US' : 'uk-UA'), {day: '2-digit', month: '2-digit'});
         
         const shiftLabel = log.shiftType === 'R' ? '🌅 R' : (log.shiftType === 'O' ? '☀️ O' : (log.shiftType === 'N' ? '🌃 N' : '🏖️ V'));
-        const pctLabel = log.shiftType === 'V' || parseFloat(log.percentage) === 0 ? '-' : `${log.percentage}%`;
+        const pct = parseFloat(log.percentage);
+        const pctLabel = (log.shiftType === 'V' || log.percentage === null || pct === 0) ? '-' : `${log.percentage}%`;
 
         row.innerHTML = `
             <td>${formattedDate}</td>
@@ -161,7 +167,8 @@ function renderTable(monthlyData) {
 }
 
 function calculateStatistics(monthlyData) {
-    const workingLogs = monthlyData.filter(log => log.shiftType !== 'V' && log.percentage && parseFloat(log.percentage) > 0);
+    // Головне виправлення: ВИХІДНІ (V) повністю виключаються з розрахунку середнього відсотка
+    const workingLogs = monthlyData.filter(log => log.shiftType !== 'V' && log.percentage !== null && parseFloat(log.percentage) > 0);
     const avgDisplay = document.getElementById('averageDisplay');
     
     if (workingLogs.length === 0) {
@@ -171,6 +178,7 @@ function calculateStatistics(monthlyData) {
         avgDisplay.innerText = `${(totalPct / workingLogs.length).toFixed(2)}%`;
     }
 
+    // Рахуємо кількість відпрацьованих робочих змін для лічильників
     const totalShifts = monthlyData.filter(log => ['R', 'O', 'N'].includes(log.shiftType)).length;
     const dayShifts = monthlyData.filter(log => log.shiftType === 'R').length;
     const afternoonShifts = monthlyData.filter(log => log.shiftType === 'O').length;
@@ -189,8 +197,12 @@ function saveData() {
 
     if (!date) return;
     
-    let pctValue = percentage ? parseFloat(percentage).toFixed(2) : "0.00";
-    if (shiftType === 'V') pctValue = "0.00";
+    let pctValue = null;
+    // Якщо зміна робоча (не V) і введено число — зберігаємо його
+    if (shiftType !== 'V' && percentage && percentage.trim() !== '') {
+        pctValue = parseFloat(percentage).toFixed(2);
+    }
+    // Якщо це вихідний (V), то pctValue автоматично залишається null (чистим)
 
     const existingIndex = productionLogs.findIndex(log => log.date === date);
     if (existingIndex !== -1) {
